@@ -61,9 +61,9 @@ console.log(user)
 
   return (
     
-    <div className="bg-white w-full z-50 shadow-lg">
+    <div className="bg-gray-300 w-full z-50 shadow-lg">
       <header className="absolute inset-x-0 top-0 z-50">
-        <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+        <nav className="flex items-center justify-between p-6 lg:px-8 bg-gray-300 shadow-md overflow-hidden fixed top-0 left-0 w-full" aria-label="Global">
           <div className="flex lg:flex-1 items-center gap-4">
             <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
@@ -83,11 +83,11 @@ console.log(user)
               </svg>
             </button>
           </div>
-          <div className="hidden lg:flex lg:gap-x-12">
+          <div className="hidden lg:flex lg:gap-x-12 ">
             <a href='/' className="text-sm font-semibold leading-6 text-gray-900">Home</a>
-            <a href={`/${user}/therapist`} className="text-sm font-semibold leading-6 text-gray-900">AI Therapist</a>
+            <a href={`/therapist`} className="text-sm font-semibold leading-6 text-gray-900">AI Therapist</a>
             <a href='/test' className="text-sm font-semibold leading-6 text-gray-900">Test</a>
-            <a href={`/${user}/anonymoussharing`} className="text-sm font-semibold leading-6 text-gray-900">Anonymous Sharing</a>
+            {/* <a href={'/newmood'} className="text-sm font-semibold leading-6 text-gray-900">New Mood Entry</a> */}
             <a href='/contact' className="text-sm font-semibold leading-6 text-gray-900">Contact-Us</a>
             <a href="/aboutus" className="text-sm font-semibold leading-6 text-gray-900">About Us</a>
           </div>
@@ -149,8 +149,8 @@ console.log(user)
 
                     <a href={`/${user}/mood`} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Mood Tracker</a>
                     <a href={`/${user}/therapist`} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">AI Therapist</a>
-                    <a href={`/${user}/quiz`} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Quiz</a>
-                    <a href={`/${user}/anonymoussharing`} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Anonymous Sharing</a>
+                    {/* <a href={`/${user}/quiz`} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Quiz</a> */}
+                    {/* <a href={`/${user}/anonymoussharing`} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Anonymous Sharing</a> */}
                     <a href="/aboutus" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">About Us</a>
                   </div>
                   <div className="py-6">

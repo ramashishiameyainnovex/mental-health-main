@@ -1,11 +1,40 @@
 import mongoose from 'mongoose';
-
 const moodSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    date: { type: Date, required: true },
-    mood: { type: String, required: true },
-  }, { timestamps: true });
-  
-  const Mood = mongoose.model('Mood', moodSchema);
+  mood: {
+    type: String,
+    required: true
+  },
+  emoji: {
+    type: String,
+    required: true
+  },
+  color: {
+    type: String,
+    default: 'blue'
+  },
+  types: [{
+    type: {
+      type: String,
+      required: true
+    },
+    solution: {
+      type: String,
+      required: true
+    }
+  }],
+  musicLinks: [{
+    title: String,
+    url: String
+  }],
+  videoLinks: [{
+    title: String,
+    url: String
+  }],
+  contentLinks: [{
+    title: String,
+    url: String
+  }]
+});
 
-  export default Mood;
+const mood = mongoose.model('Mood', moodSchema);
+export default mood

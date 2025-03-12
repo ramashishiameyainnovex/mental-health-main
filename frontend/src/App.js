@@ -20,6 +20,12 @@ import Quiz from './compnents/quiz/Quiz.jsx';
 import UpdateJournal from './compnents/journal/Updatejournal.jsx';
 import Therapist from './compnents/AITherapist/Therapist.jsx';
 import ForgotPassword from './compnents/forgotpassowrd/forgotpassword.jsx';
+import MoodTest from './compnents/testComp/MoodTest.jsx';
+import MoodAdmin from './compnents/MoodAdmin/MoodAdmin.jsx';
+import AboutPage from './compnents/aboutUs/About.jsx';
+import ContactPage from './compnents/contact/Contact.jsx';
+import AITherapist from './compnents/AITherapist/AITherapist.jsx';
+// import Footer from './compnents/footer/Footer.js';
 
 const PrivateRoute = ({ children }) => {
   const { username: usernameFromUrl } = useParams(); // Extract username from URL
@@ -38,12 +44,15 @@ const PrivateRoute = ({ children }) => {
 function App() {
   return (
     <BrowserRouter>
+    <Navbar/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/:username/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/test" element={<MoodTest />} />
+        <Route path="/newmood" element={<MoodAdmin />} />
         <Route path="/unauthorizedAccess" element={<NoAccess />} />
         <Route path="/:username/updateprofile" element={<PrivateRoute><ProfileUpdate /></PrivateRoute>} />
         <Route path="/:username/anonymoussharing" element={<PrivateRoute><AnonymousSharing /></PrivateRoute>} />
@@ -51,8 +60,9 @@ function App() {
         <Route path="/:username/allanonymousposts" element={<PrivateRoute><AllAnonymousPost /></PrivateRoute>} />
         <Route path="/:username/mood" element={<PrivateRoute><MoodTrack /></PrivateRoute>} />
         <Route path="/:username/quiz" element={<PrivateRoute><Quiz /></PrivateRoute>} />
-        <Route path="/:username/therapist" element={<PrivateRoute><Therapist /></PrivateRoute>} />
-        <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/therapist" element={<AITherapist />} />
+        <Route path="/aboutus" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         
 
 
@@ -63,6 +73,7 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+      {/* <Footer/> */}
       </BrowserRouter>
   );
 }
