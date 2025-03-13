@@ -61,8 +61,8 @@ console.log(user)
 
   return (
     
-    <div className="bg-gray-300 w-full z-50 shadow-lg">
-      <header className="absolute inset-x-0 top-0 z-50">
+    <div className="bg-gray-300 w-full shadow-lg">
+      <header className="absolute inset-x-0 top-0 z-40">
         <nav className="flex items-center justify-between p-6 lg:px-8 bg-gray-300 shadow-md overflow-hidden fixed top-0 left-0 w-full" aria-label="Global">
           <div className="flex lg:flex-1 items-center gap-4">
             <a href="/" className="-m-1.5 p-1.5">
@@ -85,8 +85,8 @@ console.log(user)
           </div>
           <div className="hidden lg:flex lg:gap-x-12 ">
             <a href='/' className="text-sm font-semibold leading-6 text-gray-900">Home</a>
-            <a href={`/therapist`} className="text-sm font-semibold leading-6 text-gray-900">AI Therapist</a>
             <a href='/test' className="text-sm font-semibold leading-6 text-gray-900">Test</a>
+            <a href={`/therapist`} className="text-sm font-semibold leading-6 text-gray-900">AI Therapist</a>
             {/* <a href={'/newmood'} className="text-sm font-semibold leading-6 text-gray-900">New Mood Entry</a> */}
             <a href='/contact' className="text-sm font-semibold leading-6 text-gray-900">Contact-Us</a>
             <a href="/aboutus" className="text-sm font-semibold leading-6 text-gray-900">About Us</a>
@@ -109,10 +109,10 @@ console.log(user)
                   </button>
                 </div>
                 {dropdownOpen && (
-                  <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex="-1">
-                    <a href={`/${user}/profile`} className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-0">Your Profile</a>
+                  <div className="absolute right-12 top-0 z-50  w-48  rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex="-1">
+                    {/* <a href={`/${user}/profile`} className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-0">Your Profile</a> */}
                     <a onClick={(e) => handleLogout(e)} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-2">Sign out</a>
-                    <a onClick={handleDelete} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-2">Delete Profile</a>
+                    {/* <a onClick={handleDelete} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-2">Delete Profile</a> */}
                   </div>
                 )}
               </div>

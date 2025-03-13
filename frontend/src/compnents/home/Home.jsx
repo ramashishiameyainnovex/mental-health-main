@@ -6,7 +6,7 @@ import Navbar from '../navbar/Navbar';
 const Home = () => {
   return (
     <div>
-        <div className='mt-20'>
+        <div className='mt-8'>
         <Home1 />
         <Home2 />
         <Home3 />

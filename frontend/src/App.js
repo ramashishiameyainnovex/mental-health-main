@@ -25,7 +25,7 @@ import MoodAdmin from './compnents/MoodAdmin/MoodAdmin.jsx';
 import AboutPage from './compnents/aboutUs/About.jsx';
 import ContactPage from './compnents/contact/Contact.jsx';
 import AITherapist from './compnents/AITherapist/AITherapist.jsx';
-// import Footer from './compnents/footer/Footer.js';
+import Footer from './compnents/footerComp/Footer.jsx';
 
 const PrivateRoute = ({ children }) => {
   const { username: usernameFromUrl } = useParams(); // Extract username from URL
@@ -73,7 +73,7 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {/* <Footer/> */}
+      <Footer/>
       </BrowserRouter>
   );
 }

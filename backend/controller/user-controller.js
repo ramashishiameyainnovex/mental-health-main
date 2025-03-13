@@ -4,26 +4,24 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import bcrypt from 'bcryptjs';
 
-
-// User Signup
-// User Signup
 export const userSignup = async (req, res) => {
   try {
-    let exist = await User.findOne({ $or: [{ username: req.body.username }, { email: req.body.email }] });
+    // Check if the email already exists
+    const exist = await User.findOne({ email: req.body.email });
     if (exist) {
-      return res.status(409).json({ msg: 'Username or email already exists!' });
+      return res.status(409).json({ msg: 'Email already exists!' });
     }
-    
+
+    // Hash the password
     const salt = await bcrypt.genSalt(10);
     req.body.password = await bcrypt.hash(req.body.password, salt);
-    
-    const newUser = new User(req.body);
-    if (req.file) {
-      newUser.profilePicture = req.file.path;
-    }
-    
-    await newUser.save();
-    return res.status(200).json(newUser);
+
+    // Create a new user instance
+    const newUser  = new User(req.body);
+
+    // Save the new user to the database
+    await newUser .save();
+    return res.status(201).json({ msg: 'User  created successfully!', user: newUser  });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -32,9 +30,9 @@ export const userSignup = async (req, res) => {
 // User Login
 export const userLogin = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
-    
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    console.log(user)
     if (!user) {
       return res.status(401).json({ message: 'Invalid username!' });
     }

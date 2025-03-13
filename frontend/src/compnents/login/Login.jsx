@@ -1,28 +1,37 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {useDispatch} from 'react-redux'
-import {signInStart, signInSuccess, signInFailure} from '../../redux/user/userSlice.js'
+import { useDispatch } from 'react-redux';
+import { signInStart, signInSuccess, signInFailure } from '../../redux/user/userSlice.js';
+import { FaEye } from "react-icons/fa";
+import { IoEyeOff } from "react-icons/io5";
+
 const Login = () => {
-  const dispatch = useDispatch()
-  const [username, setUsername] = useState('');
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // dispatch(signInStart())
+    setLoading(true);
+    dispatch(signInStart());
+
     try {
-      const response = await axios.post('http://localhost:8000/login', { username, password });
-      console.log("response",response)
-      if(response.status===200){
-      localStorage.setItem('token', response.data.token);
-      dispatch(signInSuccess(response.data.user))
-      navigate(`/`);
+      const response = await axios.post('http://localhost:8000/login', { email, password });
+      if (response.status === 200) {
+        localStorage.setItem('token', response.data.token);
+        dispatch(signInSuccess(response.data.user));
+        navigate(`/`);
       }
     } catch (err) {
-      setError('Invalid username or password');
+      setError('Invalid email or password');
+      dispatch(signInFailure(err.message));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,7 +40,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex max-h-screen flex-1 flex-col justify-center items-center px-6 py-4 lg:px-8">
+    <div className="flex min-h-screen flex-1 flex-col justify-center items-center px-6 lg:px-8">
       {error && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
@@ -59,23 +68,23 @@ const Login = () => {
           </div>
         </div>
       )}
-      <div className="w-screen mt-32">
+      <div className="w-screen mt-8">
         <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-md">
           <div className="px-6 py-4" style={{ background: 'linear-gradient(to right, #D1D5DB, #E5E7EB, #F3F4F6)' }}>
             <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">Sign in to your account</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-                  Username
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                  Email
                 </label>
                 <input
-                  className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="username"
-                  type="text"
-                  placeholder="Enter username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  autoComplete="username"
+                  className="appearance-none border-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-0 hover:border-blue-400"
+                  id="email"
+                  type="email"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
                   required
                 />
               </div>
@@ -83,37 +92,43 @@ const Login = () => {
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                   Password
                 </label>
-                <input
-                  className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="password"
-                  type="password"
-                  placeholder="Enter password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
-                  required
-                />
+                <div className="flex items-center border rounded w-full px-1   bg-white focus:outline-none focus:shadow-outline">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                    required
+                    className="appearance-none border-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-0 "
+                  />
+                  <span onClick={() => setShowPassword(!showPassword)} className="cursor-pointer px-3">
+                    {showPassword ? <FaEye /> : <IoEyeOff />}
+                  </span>
+                </div>
               </div>
               <div className="flex items-center justify-between">
                 <button
                   className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="button"
                   onClick={() => {
-                    setUsername('');
+                    setEmail('');
                     setPassword('');
                   }}
                 >
                   Cancel
                 </button>
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   type="submit"
+                  disabled={loading}
                 >
-                  Sign in
+                  {loading ? 'Signing in...' : 'Sign in'}
                 </button>
               </div>
             </form>
-            <a href="/forgotpassword" className='underline'>Forgot Password</a>
+            <a href="/forgotpassword" className='underline'>Forgot Password?</a>
             <p className="mt-10 text-center text-sm text-gray-500">
               Not a member?{' '}
               <a href="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">

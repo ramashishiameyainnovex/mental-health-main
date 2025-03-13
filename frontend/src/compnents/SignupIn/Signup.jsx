@@ -1,20 +1,16 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PhotoIcon } from '@heroicons/react/24/solid';
 
 export default function Signup() {
     const [formData, setFormData] = useState({
-        username: '',
-        password: '',
         name: '',
         email: '',
+        phone: '',
+        password: '',
         gender: '',
-        bio: '',
         age: ''
     });
 
-    const [profilePicture, setProfilePicture] = useState(null);
     const [error, setError] = useState('');
     const [missingDetailsError, setMissingDetailsError] = useState('');
     const navigate = useNavigate();
@@ -27,25 +23,15 @@ export default function Signup() {
         });
     };
 
-    const handleFileChange = (e) => {
-        setProfilePicture(e.target.files[0]);
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
     
         // Check for missing fields
-        const requiredFields = ['username', 'password', 'name', 'email', 'gender', 'age'];
+        const requiredFields = ['name', 'email', 'phone', 'password', 'gender', 'age'];
         const missingFields = requiredFields.filter(field => !formData[field]);
     
         if (missingFields.length > 0) {
             setMissingDetailsError('Please fill in all required fields.');
-            return;
-        }
-    
-        // Validate username
-        if (!/^[a-zA-Z0-9_]{4,20}$/.test(formData.username)) {
-            setError('Username must be 4-20 characters long and can only contain letters, numbers, and underscores.');
             return;
         }
     
@@ -66,19 +52,20 @@ export default function Signup() {
             setError('You must be at least 18 years old to sign up.');
             return;
         }
+
+        // Validate phone number (optional, adjust regex as needed)
+        if (!/^\d{10}$/.test(formData.phone)) {
+            setError('Please enter a valid phone number (10 digits).');
+            return;
+        }
     
         try {
-            const formDataWithFile = new FormData();
-            for (const key in formData) {
-                formDataWithFile.append(key, formData[key]);
-            }
-            if (profilePicture) {
-                formDataWithFile.append('profilePicture', profilePicture);
-            }
-    
             const response = await fetch('http://localhost:8000/signup', {
                 method: 'POST',
-                body: formDataWithFile,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
             });
     
             if (response.status === 409) {
@@ -102,15 +89,13 @@ export default function Signup() {
 
     const handleCancel = () => {
         setFormData({
-            username: '',
-            password: '',
             name: '',
             email: '',
+            phone: '',
+            password: '',
             gender: '',
-            bio: '',
             age: ''
         });
-        setProfilePicture(null);
         setError('');
         setMissingDetailsError('');
     };
@@ -121,7 +106,7 @@ export default function Signup() {
     };
 
     return (
-        <div className="flex max-h-screen flex-1 flex-col justify-center p-6 mt-[450px]">
+        <div className="flex min-h-screen flex-1 flex-col justify-center p-6 max-w-md m-auto">
             {(error || missingDetailsError) && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
@@ -149,93 +134,14 @@ export default function Signup() {
                     </div>
                 </div>
             )}
-            <div className=" mt-20">
+            <div className="mt-20">
                 <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-white rounded-lg overflow-hidden shadow-md" style={{ background: 'linear-gradient(to right, #D1D5DB, #E5E7EB, #F3F4F6)' }}>
                     <div className="px-8 py-6">
-                        <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Signup</h2>
+                        <h2 className="text-2xl font-bold text-blue-500 mb-8 text-center">Signup</h2>
                         <div className="space-y-12">
                             <div className="border-b border-gray-900/10 pb-12">
                                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 col-span-full">
-                                    <div className="col-span-full">
-                                        <label htmlFor="profilePicture" className="block text-sm font-medium leading-6 text-gray-900">Profile Picture</label>
-                                        <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                            <div className="text-center">
-                                                <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                                                <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                                    <label htmlFor="file-upload" className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                                                        <span>Upload a file</span>
-                                                        <input id="file-upload" name="profilePicture" type="file" onChange={handleFileChange} className="sr-only" />
-                                                    </label>
-                                                    <p className="pl-1">or drag and drop</p>
-                                                </div>
-                                                <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div className="sm:col-span-4">
-                                        <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-                                            Username <span className="text-red-500">*</span>
-                                        </label>
-                                        <div className="mt-2">
-                                            <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                                <input
-                                                    type="text"
-                                                    name="username"
-                                                    id="username"
-                                                    autoComplete="username"
-                                                    value={formData.username}
-                                                    onChange={handleChange}
-                                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                                                    placeholder="janesmith"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="sm:col-span-4">
-                                        <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                                            Password <span className="text-red-500">*</span>
-                                        </label>
-                                        <div className="mt-2">
-                                            <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                                <input
-                                                    type="password"
-                                                    name="password"
-                                                    id="password"
-                                                    autoComplete="current-password"
-                                                    value={formData.password}
-                                                    onChange={handleChange}
-                                                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-span-full">
-                                        <label htmlFor="bio" className="block text-sm font-medium leading-6 text-gray-900">
-                                            About
-                                        </label>
-                                        <div className="mt-2">
-                                            <textarea
-                                                id="bio"
-                                                name="bio"
-                                                rows={3}
-                                                value={formData.bio}
-                                                onChange={handleChange}
-                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            />
-                                        </div>
-                                        <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="border-b border-gray-900/10 pb-12">
-                                <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-                                <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
-
-                                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                                    <div className="sm:col-span-3">
                                         <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
                                             Name <span className="text-red-500">*</span>
                                         </label>
@@ -269,7 +175,41 @@ export default function Signup() {
                                         </div>
                                     </div>
 
-                                    <div className="sm:col-span-3">
+                                    <div className="sm:col-span-4">
+                                        <label htmlFor="phone" className="block text-sm font-medium leading-6 text-gray-900">
+                                            Phone <span className="text-red-500">*</span>
+                                        </label>
+                                        <div className="mt-2">
+                                            <input
+                                                type="text"
+                                                name="phone"
+                                                id="phone"
+                                                value={formData.phone}
+                                                onChange={handleChange}
+                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                placeholder="1234567890"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="sm:col-span-4">
+                                        <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                                            Password <span className="text-red-500">*</span>
+                                        </label>
+                                        <div className="mt-2">
+                                            <input
+                                                type="password"
+                                                name="password"
+                                                id="password"
+                                                autoComplete="current-password"
+                                                value={formData.password}
+                                                onChange={handleChange}
+                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="sm:col-span-4">
                                         <label htmlFor="gender" className="block text-sm font-medium leading-6 text-gray-900">
                                             Gender <span className="text-red-500">*</span>
                                         </label>
@@ -306,14 +246,13 @@ export default function Signup() {
                                             />
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-                                <a href="/login">Already Account?<span className='text-indigo-600'>Login</span> </a>
+                            <a href="/login">Already have an account? <span className='text-indigo-600'>Login</span></a>
                         </div>
                     </div>
 
-                    <div className="mt-12 flex items-center justify-center gap-x-6 bg-white py-4"  style={{ background: 'linear-gradient(to right, #D1D5DB, #E5E7EB, #F3F4F6)' }}>
+                    <div className="mt-12 flex items-center justify-center gap-x-6 bg-white py-4" style={{ background: 'linear-gradient(to right, #D1D5DB, #E5E7EB, #F3F4F6)' }}>
                         <button onClick={handleCancel} type="button" className="text-lg font-semibold leading-6 text-gray-900">
                             Cancel
                         </button>
@@ -328,4 +267,3 @@ export default function Signup() {
         </div>
     );
 }
-

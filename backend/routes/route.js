@@ -16,25 +16,25 @@ import cors from 'cors';
 
 router.use(cors());
 
-router.post('/signup', upload.single('profilePicture') ,userSignup);
+router.post('/signup', userSignup);
 router.post('/login', userLogin);
 router.put('/forgotpassword', sendOtpToEmail);
 router.patch('/forgotpassword', verifyOtp);
 router.put('/updatepassword', updatePassword);
 router.get('/users', getUsers);
-router.get('/:username/getuserdetails', getUserDetails);
+router.get('/getuserdetails', getUserDetails);
 router.delete('/delete-user/:username', deleteUser);
-router.patch('/:username/update-user', updateUser);
+router.patch('/update-user', updateUser);
 
 router.get('/anonymousPosts', getAnonymousPosts);
 router.post('/createAnonymousPosts', createAnonymousPost);
 
 
 router.post ('/:username', upload1.single('coverPicture'), create_journal);
-router.get('/:username/journals', getPostsByUsername);
+router.get('/journals', getPostsByUsername);
 router.put('/journals/:username/:id', update_journal);
 router.delete('/journal-delete/:username/:id', delete_journal);
-router.get('/:username/:id', getJournalById);
+// router.get('/:username/:id', getJournalById);
 
 //passport.authenticate('jwt', { session: false })
 
